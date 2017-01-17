@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="users">
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.css">
+	<script src="lib/angular/angular.js"></script>
+	<script src="lib/angular/angular-messages.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/usersCtrl.js"></script>
+	<title>Usuários</title>
+</head>
+<body ng-controller="usersCtrl">
+	<div class="container">
+		<h3 class="jumbotron" ng-bind="app"></h3>
+		<table class="table table-striped">
+			<tr>
+				<th>Nome</th>
+				<th>Data de Nascimento</th>
+				<th>Gênero</th>
+			</tr>
+			<tr ng-repeat="user in users | filter:criterioDeBusca">
+				<td>{{user.name}}</td>
+				<td>{{user.dateOfBirth}}</td>
+				<td>{{user.gender}}</td>
+			</tr>
+		</table>
+		<hr>
+		<form  name="contatoForm">
+			<input class="form-control" type="text" name="nome" placeholder="Nome">
+			<input class="form-control" type="text" name="dataNascimento" placeholder="Data de Nascimento">
+			<select class="form-control" ng-model="genero" ng-options="genero.descricao for genero in generos">
+				<option value="">Selecione um gênero</option>
+			</select>
+		</form>
+	</div>
+</body>
+</html>
