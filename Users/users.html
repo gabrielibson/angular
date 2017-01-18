@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<script src="lib/angular/angular.js"></script>
 	<script src="lib/angular/angular-messages.js"></script>
 	<script src="js/app.js"></script>
@@ -11,27 +12,77 @@
 </head>
 <body ng-controller="usersCtrl">
 	<div class="container">
-		<h3 class="jumbotron" ng-bind="app"></h3>
-		<table class="table table-striped">
-			<tr>
-				<th>Nome</th>
-				<th>Data de Nascimento</th>
-				<th>Gênero</th>
-			</tr>
-			<tr ng-repeat="user in users | filter:criterioDeBusca">
-				<td>{{user.name}}</td>
-				<td>{{user.dateOfBirth}}</td>
-				<td>{{user.gender}}</td>
-			</tr>
-		</table>
+		<div class="jumbotron">
+			<h3 ng-bind="app"></h3>
+		</div>
+		<div class="btn-toolbar" role="toolbar">
+			<button type="button" class="btn btn-default btn-lg" ng-click="carregarUsers()">
+  				<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+  				 Atualizar
+			</button>
+			<button type="button" class="btn btn-primary btn-lg" ng-click="mostrarFormAddUser(true)">
+  				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+  				 Adicionar
+			</button>
+			<button type="button" class="btn btn-success btn-lg" ng-disabled="!isUserSelecionado(users)">
+  				<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+  				 Editar
+			</button>
+			<button type="button" class="btn btn-danger btn-lg" ng-show="isUserSelecionado(users)" ng-click="apagarUsers(users)">
+  				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+  				 Remover
+			</button>
+		</div>
+		<div ng-if="clicado">
+			<form  name="userForm">
+				<hr>
+				<input class="form-control" type="text" name="nome" placeholder="Nome" ng-model="user.name" ng-required="true" ng-minlength="10">
+				<input class="form-control" type="text" name="dataNascimento" placeholder="Data de Nascimento" ng-model="user.dateOfBirth" ng-required="true" ng-pattern="/^\d{2}-\d{2}-\d{4}$/">
+				<select class="form-control" name="gender" ng-model="user.gender" ng-options="genero.id as genero.descricao for genero in generos" ng-required="true">
+					<option value="">Selecione um gênero</option>
+				</select>
+			</form>
+			<div ng-show="userForm.nome.$dirty" ng-messages="userForm.nome.$error">
+    		<div ng-message="required" class="alert alert-danger">
+    			Por favor, preencha o campo nome!
+    		</div>
+    		<div ng-message="minlength" class="alert alert-danger">
+    			O campo nome deve ter no mínimo 10 caracteres.
+    		</div>
+			</div>
+			<div class="alert alert-danger" ng-show="userForm.dataNascimento.$error.required && userForm.dataNascimento.$dirty">
+				Por favor, preencha o campo Data de Nascimento!
+			</div>
+			<div class="alert alert-danger" ng-show="userForm.dataNascimento.$error.pattern && userForm.dataNascimento.$dirty">
+				O campo Data de Nascimento deve ter o formato DD-MM-YYYY
+			</div>
+			<div class="alert alert-danger" ng-show="userForm.gender.$error.required && userForm.gender.$dirty">
+				Por favor, selecione um gênero!
+			</div>
+			<button class="btn btn-primary btn-block" ng-click="adicionarUsuario(user)">Adicionar Usuário</button>
+			<button class="btn btn-confirm btn-block" ng-click="mostrarFormAddUser(false)">Cancelar</button>
+		</div>
 		<hr>
-		<form  name="contatoForm">
-			<input class="form-control" type="text" name="nome" placeholder="Nome">
-			<input class="form-control" type="text" name="dataNascimento" placeholder="Data de Nascimento">
-			<select class="form-control" ng-model="genero" ng-options="genero.descricao for genero in generos">
-				<option value="">Selecione um gênero</option>
-			</select>
-		</form>
+		<div class="panel panel-default">
+			<div class="panel-heading"><h4>Lista de Usuários</h4></div>
+			<div class="panel-body">
+    			<input class="form-control" ng-model="criterioDeBusca" type="text" placeholder="O que você está buscando?" />
+ 			</div>
+			<table class="table table-striped">
+				<tr>
+					<th></th>
+					<th>Nome</th>
+					<th>Data de Nascimento</th>
+					<th>Gênero</th>
+				</tr>
+				<tr ng-repeat="user in users | filter:criterioDeBusca" ng-class="{info: user.selecionado}">
+					<td><input type="checkbox" ng-model="user.selecionado"></td>
+					<td>{{user.name}}</td>
+					<td>{{user.dateOfBirth}}</td>
+					<td>{{user.gender}}</td>
+				</tr>
+			</table>
+		</div>
 	</div>
 </body>
 </html>
