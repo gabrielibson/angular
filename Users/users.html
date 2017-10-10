@@ -12,7 +12,67 @@
 </head>
 <body ng-controller="usersCtrl">
 	<div class="container">
-		<div class="jumbotron">
+
+		<br/>
+		<div class="panel panel-default">
+		    	
+					<div class="panel-heading"><h3 ng-bind="app"></h3></div>
+					<div class="panel-body">
+		            
+		            <fieldset class="col-md-6">    	
+							<legend>Dados Pessoais</legend>
+							
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<form  name="userForm">
+										<input class="form-control" type="text" name="nome" placeholder="Nome" ng-model="user.name" ng-required="true" ng-minlength="10">
+										<br/>
+										<input class="form-control" type="text" name="email" placeholder="E-mail institucional" ng-model="user.email" ng-required="true" ng-minlength="10" ng-pattern="/^[a-z]+[a-z0-9._]+@tjpe+\.jus+\.br$/">
+										<br/>
+										<input class="form-control" type="text" name="dataNascimento" placeholder="Data de nascimento" ng-model="user.dateOfBirth" ng-required="true" ng-pattern="/^\d{2}-\d{2}-\d{4}$/">
+										<br/>
+										<select class="form-control" name="gender" ng-model="user.gender" ng-options="genero.id as genero.descricao for genero in generos" ng-required="true">
+											<option value="">Selecione um sexo</option>
+										</select>
+										<br/>
+									</form>
+									<div ng-show="userForm.nome.$dirty" ng-messages="userForm.nome.$error">
+    									<div ng-message="required" class="alert alert-danger">
+    										Por favor, preencha o campo nome!
+    									</div>
+    									<div ng-message="minlength" class="alert alert-danger">
+    										O campo nome deve ter no mínimo 10 caracteres.
+    									</div>
+									</div>
+									<div class="alert alert-danger" ng-show="userForm.email.$error.pattern && userForm.email.$dirty">
+										O campo E-mail deve pertencer ao domínio @tjpe.jus.br
+									</div>
+									<div class="alert alert-danger" ng-show="userForm.email.$error.required && userForm.email.$dirty">
+										Por favor, preencha o campo E-mail institucional!
+									</div>
+									<div class="alert alert-danger" ng-show="userForm.dataNascimento.$error.required && userForm.dataNascimento.$dirty">
+										Por favor, preencha o campo Data de Nascimento!
+									</div>
+									<div class="alert alert-danger" ng-show="userForm.dataNascimento.$error.pattern && userForm.dataNascimento.$dirty">
+										O campo Data de Nascimento deve ter o formato DD-MM-YYYY
+									</div>
+									<div class="alert alert-danger" ng-show="userForm.gender.$error.required && userForm.gender.$dirty">
+										Por favor, selecione um gênero!
+									</div>
+								</div>
+							</div>
+							
+						</fieldset>				
+						
+						<div class="clearfix"></div>
+		            </div>
+		                
+		</div>
+
+
+
+
+		<!-- <div class="jumbotron">
 			<h3 ng-bind="app"></h3>
 		</div>
 		<div class="btn-toolbar" role="toolbar">
@@ -82,7 +142,7 @@
 					<td>{{user.gender}}</td>
 				</tr>
 			</table>
-		</div>
+		</div> -->
 	</div>
 </body>
 </html>
